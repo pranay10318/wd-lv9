@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
 
+    static getTodos(){
+      return this.findAll();//from sequelize package  donot confuse bro
+    }
+
     static addTodo({ title, dueDate }) {//refactoring for business logic and we can add a todo at any endpoint
       return this.create({ title: title, dueDate: dueDate, completed: false });
     }
