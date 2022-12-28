@@ -1,19 +1,19 @@
 <div>
-  <h5>Overdue <span class="bg-gray-200 rounded" id="count-overdue"><%= overdue.length%></span></h5>
+  <h5>Overdue </h5><span class="bg-gray-200 rounded" id="count-overdue"><%= overdue.length%></span>
   <ul class="list-none">
     <%- include('overDue.ejs') %>
   </ul>
 
   <h5>
-    Due Today <span class="bg-gray-200 rounded" id="count-due-today"><%= dueToday.length%></span>
-  </h5>
+    Due Today 
+  </h5><span class="bg-gray-200 rounded" id="count-due-today"><%= dueToday.length%></span>
   <ul class="list-none">
     <%- include('dueToday.ejs') %>
   </ul>
 
   <h5>
-    Due Later <span class="bg-gray-200 rounded" id="count-due-later"><%= dueLater.length%></span>
-  </h5>
+    Due Later 
+  </h5><span class="bg-gray-200 rounded" id="count-due-later"><%= dueLater.length%></span>
   <ul class="list-none">
     <%- include('dueLater.ejs') %>
   </ul>
