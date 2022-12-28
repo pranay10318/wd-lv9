@@ -9,19 +9,26 @@ app.set("view engine", "ejs"); //setting up engine to work with ejs
 
 app.get("/", async (request, response) => {
   const allTodo = await Todo.getTodos();
+  const dueToday = await Todo.dueToday();
+  const overdue = await Todo.overdue();
+  const dueLater = await Todo.dueLater();
+
   if (request.accepts("html")) {
     //request from web i.e. it accepts html   but for postman it accepts json that is in else part
     response.render("index", {
+      overdue,
       allTodo,
+      dueToday,
+      dueLater,
     });
   } else {
     //for postman like api  we should get json format as it donot support html
-    response.json({ allTodo });
+    response.json({ allTodo, dueToday, dueLater, od });
   }
 });
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/todos", async (request, response)=> {
+app.get("/todos", async (request, response) => {
   //getting todos from server
   console.log("Processing list of all Todos ...");
   // FILL IN YOUR CODE HERE
@@ -38,7 +45,7 @@ app.get("/todos", async (request, response)=> {
   // response.send(todos)
 });
 
-app.get("/todos/:id", async (request, response)=> {
+app.get("/todos/:id", async (request, response) => {
   //async for getting req
   try {
     const todo = await Todo.findByPk(request.params.id);
@@ -49,7 +56,7 @@ app.get("/todos/:id", async (request, response)=> {
   }
 });
 
-app.post("/todos", async  (request, response)=> {
+app.post("/todos", async (request, response) => {
   //posting todos to server
   try {
     const todo = await Todo.addTodo(request.body);

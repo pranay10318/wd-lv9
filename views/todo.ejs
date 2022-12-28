@@ -1,9 +1,20 @@
-<table>
-    <% for(var i=0;i<allTodo.length;i++) {  %>
-    <tr>
-      <td>
-        <%= i+1 %> : <%= " "+allTodo[i].title %>
-      </td>
-    </tr>
-    <% } %>
-  </table>
+<div>
+  <h5>Overdue <span class="bg-gray-200 rounded" id="count-overdue"><%= overdue.length%></span></h5>
+  <ul class="list-none">
+    <%- include('overDue.ejs') %>
+  </ul>
+
+  <h5>
+    Due Today <span class="bg-gray-200 rounded" id="count-due-today"><%= dueToday.length%></span>
+  </h5>
+  <ul class="list-none">
+    <%- include('dueToday.ejs') %>
+  </ul>
+
+  <h5>
+    Due Later <span class="bg-gray-200 rounded" id="count-due-later"><%= dueLater.length%></span>
+  </h5>
+  <ul class="list-none">
+    <%- include('dueLater.ejs') %>
+  </ul>
+</div>
