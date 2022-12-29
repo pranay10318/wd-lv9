@@ -25,7 +25,12 @@ app.get("/", async (request, response) => {
     });
   } else {
     //for postman like api  we should get json format as it donot support html
-    response.json({ allTodo, dueToday, dueLater, overdue });
+    response.json({
+      allTodo,
+      dueToday,
+      dueLater,
+      overdue,
+    });
   }
 });
 app.use(express.static(path.join(__dirname, "public")));
@@ -88,6 +93,12 @@ app.put("/todos/:id/markAsCompleted", async function (request, response) {
 app.delete("/todos/:id", async function (request, response) {
   console.log("We have to delete a Todo with ID: ", request.params.id);
   // FILL IN YOUR CODE HERE
+  // try{//this code is by them i.e. wd   my code is below
+  //   await Todo.remove(request.params.id);
+  //   return response.json({success:true});
+  // }catch(error){
+  //   return response.status(422),json(error);
+  // }
   try {
     var c = await Todo.destroy({
       //as this function return the number of rows delted do we can check if >0 we can delete it

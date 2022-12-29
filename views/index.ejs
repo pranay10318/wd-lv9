@@ -7,6 +7,32 @@
     <title>Document</title>
     <script src="http://cdn.tailwindcss.com"></script>
     <link href="./css/styles.css" rel="stylesheet" />
+    <script>
+      function updateTodo(id){
+        fetch(`/todos/${id}/markAsCompleted`,{//url to make the to as completed after that we need to reload   headers and body can also be placed
+          method:"put",
+          headers:{"Content-type":"application/json"},
+        })
+        .then((res)=>{if(res.ok){
+
+          window.location.reload();
+        }
+        })
+        .catch((err)=>console.error(err));//o/p error to the console
+      }
+      function deleteTodo(id){
+        fetch(`/todos/${id}`,{//url to make the to as completed after that we need to reload   headers and body can also be placed
+          method:"delete",
+          headers:{"Content-type":"application/json"},
+        })
+        .then((res)=>{
+          if(res.ok){
+          window.location.reload();
+        }
+        })
+        .catch((err)=>console.error(err));//o/p error to the console
+      }
+    </script>
   </head>
   <body>
     <div class="grid grid-cols-6">
@@ -41,7 +67,9 @@
           </div>
         </form>
         <div>
-        <%- include("todo.ejs") %>
+          <%- include("todo.ejs",{title:"Overdue",data:overdue}) %>
+          <%- include("todo.ejs",{title:"Due Today",data:dueToday}) %>
+          <%- include("todo.ejs",{title:"Due Later",data:dueLater}) %>
         </div>
       </div>
     </div>

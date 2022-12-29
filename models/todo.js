@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 "use strict";
 const { Model, Op } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
@@ -32,6 +33,13 @@ module.exports = (sequelize, DataTypes) => {
       return this.findAll({
         where: { dueDate: { [Op.lt]: new Date() } }, //greater than the duedate
         order: [["id", "ASC"]],
+      });
+    }
+    static async remove(id) {
+      return this.destroy({
+        where: {
+          id,
+        },
       });
     }
 
