@@ -1,12 +1,16 @@
 const express = require("express");
+var csrf = require("csurf");
 const app = express();
 const { Todo } = require("./models"); //for doing any operations on todo we should import models
 const bodyParser = require("body-parser"); //for parsing from/to json
+var cookieParser = require("cookie-parser");
 const path = require("path");
 
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false })); //for encoding urls  form submission for maniputlating todo
 
+app.use(cookieParser());
+app.use(csrf({ cookie: true }));
 app.set("view engine", "ejs"); //setting up engine to work with ejs
 
 app.get("/", async (request, response) => {
@@ -22,6 +26,7 @@ app.get("/", async (request, response) => {
       allTodo,
       dueToday,
       dueLater,
+      csrfToken: request.csrfToken(),
     });
   } else {
     //for postman like api  we should get json format as it donot support html
@@ -78,12 +83,14 @@ app.post("/todos", async (request, response) => {
   }
 });
 
-app.put("/todos/:id/markAsCompleted", async function (request, response) {
-  //for this router the todo at specific id should be marked as complete
-  const todo = await Todo.findByPk(request.params.id);
+app.put("/todos/:id", async function (request, response) {
+  console.log("we have to update a todo with ID:", request.params.id);
   try {
-    const updatedTodo = await todo.markAsCompleted();
-    return response.json(updatedTodo); // as markascompleted func returns the todo instance we should send it as response
+    const todo = await Todo.findByPk(request.params.id);
+    const updatedTodo = await todo.setCompletionStatus(
+      request.body.completed //this part we are passing in index.js body attribute
+    );
+    return response.json(updatedTodo);
   } catch (error) {
     console.log(error);
     return response.status(422).json(error);

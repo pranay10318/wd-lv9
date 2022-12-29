@@ -4,33 +4,48 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="<%= csrfToken %>" />
+
     <title>Document</title>
     <script src="http://cdn.tailwindcss.com"></script>
     <link href="./css/styles.css" rel="stylesheet" />
     <script>
-      function updateTodo(id){
-        fetch(`/todos/${id}/markAsCompleted`,{//url to make the to as completed after that we need to reload   headers and body can also be placed
-          method:"put",
-          headers:{"Content-type":"application/json"},
-        })
-        .then((res)=>{if(res.ok){
+      var token = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+        const updateTodo = (id, bool) => {//here we are taking checked attribute from todo.ejs
+        console.log(bool);
+        fetch(`/todos/${id}`, {
+          method: "put",
+          headers: { "content-Type": "application/json" },
+          body: JSON.stringify({//for it we are needed to pass the completion status
+            completed: !bool,
+            _csrf: token,
 
-          window.location.reload();
-        }
+          }),
         })
-        .catch((err)=>console.error(err));//o/p error to the console
-      }
-      function deleteTodo(id){
-        fetch(`/todos/${id}`,{//url to make the to as completed after that we need to reload   headers and body can also be placed
-          method:"delete",
-          headers:{"Content-type":"application/json"},
+          .then((res) => {
+            if (res.ok) {
+              window.location.reload();
+            }
+          })
+          .catch((err) => console.error(err));
+      };
+      function deleteTodo(id) {
+        fetch(`/todos/${id}`, {
+          //url to make the to as completed after that we need to reload   headers and body can also be placed
+          method: "delete",
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify({
+            _csrf: token,
+          }),
         })
-        .then((res)=>{
-          if(res.ok){
-          window.location.reload();
-        }
-        })
-        .catch((err)=>console.error(err));//o/p error to the console
+          .then((res) => {
+            if (res.ok) {
+              window.location.reload();
+            }
+          })
+          .catch((err) => console.error(err)); //o/p error to the console
       }
     </script>
   </head>
@@ -41,6 +56,7 @@
         <form action="/todos" method="post">
           <div class="flex gap-2 py-4">
             <div class="flex-auto">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
               <input
                 type="text"
                 placeholder="What's next?"
@@ -67,9 +83,9 @@
           </div>
         </form>
         <div>
-          <%- include("todo.ejs",{title:"Overdue",data:overdue}) %>
-          <%- include("todo.ejs",{title:"Due Today",data:dueToday}) %>
-          <%- include("todo.ejs",{title:"Due Later",data:dueLater}) %>
+          <%- include("todo.ejs",{title:"Overdue",data:overdue}) %> <%-
+          include("todo.ejs",{title:"Due Today",data:dueToday}) %> <%-
+          include("todo.ejs",{title:"Due Later",data:dueLater}) %>
         </div>
       </div>
     </div>
