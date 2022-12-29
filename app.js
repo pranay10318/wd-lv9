@@ -18,6 +18,7 @@ app.get("/", async (request, response) => {
   const dueToday = await Todo.dueToday();
   const overdue = await Todo.overdue();
   const dueLater = await Todo.dueLater();
+  const completedItems = await Todo.completedItems();
 
   if (request.accepts("html")) {
     //request from web i.e. it accepts html   but for postman it accepts json that is in else part
@@ -26,6 +27,7 @@ app.get("/", async (request, response) => {
       allTodo,
       dueToday,
       dueLater,
+      completedItems,
       csrfToken: request.csrfToken(),
     });
   } else {
@@ -35,6 +37,7 @@ app.get("/", async (request, response) => {
       dueToday,
       dueLater,
       overdue,
+      completedItems,
     });
   }
 });
