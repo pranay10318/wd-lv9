@@ -5,6 +5,8 @@ const bodyParser = require("body-parser"); //for parsing from/to json
 const path = require("path");
 
 app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false })); //for encoding urls  form submission for maniputlating todo
+
 app.set("view engine", "ejs"); //setting up engine to work with ejs
 
 app.get("/", async (request, response) => {
@@ -23,7 +25,7 @@ app.get("/", async (request, response) => {
     });
   } else {
     //for postman like api  we should get json format as it donot support html
-    response.json({ allTodo, dueToday, dueLater, od });
+    response.json({ allTodo, dueToday, dueLater, overdue });
   }
 });
 app.use(express.static(path.join(__dirname, "public")));
@@ -59,8 +61,12 @@ app.get("/todos/:id", async (request, response) => {
 app.post("/todos", async (request, response) => {
   //posting todos to server
   try {
-    const todo = await Todo.addTodo(request.body);
-    return response.json(todo);
+    await Todo.addTodo({
+      //here for posting we should pass a json format thing   before we directly type todo in body->raw of postman and post   now we should directly pass
+      title: request.body.title,
+      dueDate: request.body.dueDate,
+    });
+    return response.redirect("/");
   } catch (error) {
     console.log(error);
     return response.status(422).json(error);

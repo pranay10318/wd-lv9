@@ -15,8 +15,6 @@ module.exports = (sequelize, DataTypes) => {
       return this.findAll(); //from sequelize package  donot confuse bro
     }
 
-    
-
     static async dueToday() {
       return this.findAll({
         where: { dueDate: new Date() },
@@ -36,7 +34,6 @@ module.exports = (sequelize, DataTypes) => {
         order: [["id", "ASC"]],
       });
     }
-
 
     static addTodo({ title, dueDate }) {
       //refactoring for business logic and we can add a todo at any endpoint
